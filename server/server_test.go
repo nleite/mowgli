@@ -8,7 +8,7 @@ import (
 func TestLoadConfig( t *testing.T){
     path := "config.json"
     expected := ServerConfig{"test", "mongodb://localhost:27017", 90000, "/tmp/log"}
-    actual := loadConfig(path)
+    actual := LoadConfig(path)
     if actual.Dbname != expected.Dbname{
         fmt.Print(actual)
         t.Error(actual.Dbname + " different from " + expected.Dbname)

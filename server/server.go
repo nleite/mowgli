@@ -23,7 +23,7 @@ type ServerConfig struct {
 }
 
 // Loads configuration information for the server
-func loadConfig(path string) ServerConfig{
+func LoadConfig(path string) ServerConfig{
     file, err := os.Open(path)
     if err != nil{
         //TODO check a better way to get the message format

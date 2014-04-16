@@ -4,6 +4,8 @@ import (
     "io"
     "fmt"
     rest "github.com/googollee/go-rest"
+    //s "./server"
+    s "github.com/nleite/mowgli/server"
 )
 
 
@@ -19,7 +21,9 @@ func hello(res http.ResponseWriter, req *http.Request) {
 
 
 func main(){
-
+    fpath := "server/config.json"
+    config := s.LoadConfig(fpath)
+    fmt.Println(config)
     h := rest.New()
     h.Use(rest.NewLog(nil))
     h.Use(rest.NewRouter())
