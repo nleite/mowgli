@@ -1,0 +1,6 @@
+{
+    "dbname": "test",
+    "connstring": "mongodb://localhost:27017",
+    "restPort": 90000,
+    "logPath": "/tmp/log"
+}
