@@ -4,7 +4,6 @@ import (
     "io"
     "fmt"
     rest "github.com/googollee/go-rest"
-    //s "./server"
     s "github.com/nleite/mowgli/server"
 )
 

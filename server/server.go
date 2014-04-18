@@ -9,10 +9,18 @@ import (
     "fmt"
 )
 
+//Returns a new pointer of Server.
+func NewServer(cfg *ServerConfig) *Server{
+    s := new(Server)
+    s.cfg = cfg
+    return s
+}
+
 
 type Server struct {
     mclient *mgo.Session
     r *rest.Rest
+    cfg *ServerConfig
 }
 
 type ServerConfig struct {
