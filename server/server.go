@@ -5,8 +5,9 @@ import (
     mgo "labix.org/v2/mgo"
     "os"
     "encoding/json"
-
     "fmt"
+    "time"
+    //log "timber"
 )
 
 //Returns a new pointer of Server.
@@ -16,6 +17,12 @@ func NewServer(cfg *ServerConfig) *Server{
     return s
 }
 
+func (s *Server) Run(){
+    //initialize mongoclient
+    timeout := time.Duration(s.cfg.Db.ConnTimeout)*time.Second
+    s.mclient, _ =  mgo.DialWithTimeout(s.cfg.Db.Connstr, timeout)
+    //TODO add logger
+}
 
 type Server struct {
     mclient *mgo.Session
@@ -23,9 +30,14 @@ type Server struct {
     cfg *ServerConfig
 }
 
+type DBConfig struct {
+    Connstr string
+    Name string
+    ConnTimeout int
+}
+
 type ServerConfig struct {
-    Dbname string
-    Connstring string
+    Db DBConfig
     RestPort int
     LogPath string
 }

@@ -1,6 +1,9 @@
 {
-    "dbname": "test",
-    "connstring": "mongodb://localhost:27017",
+    "db":{ 
+        "name": "test",
+        "connstr": "mongodb://localhost:27017",
+        "conntimeout": 1
+    },
     "restPort": 90000,
     "logPath": "/tmp/log"
 }

@@ -7,11 +7,12 @@ import (
 
 func TestLoadConfig( t *testing.T){
     path := "config.json"
-    expected := ServerConfig{"test", "mongodb://localhost:27017", 90000, "/tmp/log"}
+    dbcfg := DBConfig{"mongodb://localhost:27017", "test", 10}
+    expected := ServerConfig{ dbcfg, 90000, "/tmp/log"}
     actual := LoadConfig(path)
-    if actual.Dbname != expected.Dbname{
+    if actual.Db.Name != expected.Db.Name{
         fmt.Print(actual)
-        t.Error(actual.Dbname + " different from " + expected.Dbname)
+        t.Error(actual.Db.Name + " different from " + expected.Db.Name)
     }
 
     if actual.RestPort < 80000 {
@@ -34,17 +35,18 @@ func TestNewServer(t *testing.T){
 
     nilsvrcfg := NewServer(nil)
 
-    if nilsvrcfg == nil{ 
+    if nilsvrcfg == nil{
         t.Error("Error, server cannot be nil")
     }
 }
 
 
-
-/*
-func TestLoadNonExistingFile(t *testing.T){
-    
-    path := "doesnotexist.json"
+func TestRun(t *testing.T){
+    path := "config.json"
+    cfg := LoadConfig(path)
+    s := NewServer(&cfg)
+    s.Run()
 
 }
-**/
+
+
