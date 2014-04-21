@@ -5,6 +5,27 @@ import (
 )
 
 
+func getServer() *Server{
+    path := "config.json"
+    cfg := LoadConfig(path)
+    server := NewServer(&cfg)
+    return server
+}
+
+func TestDBStats(t *testing.T){
+    server := getServer()
+    stats := server.DBStats()
+    if stats != nil{
+        t.Error("Should be null before initializing Run()")
+    }
+    server.Run()
+    stats = server.DBStats()
+    fmt.Println(stats)
+    if stats.Db != "test"{
+        t.Error("Not collecting DB name correctly")
+    }
+
+}
 func TestServerCheckDBConnection(t *testing.T){
     path := "config.json"
     cfg := LoadConfig(path)

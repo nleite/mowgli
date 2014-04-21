@@ -37,6 +37,47 @@ func (s *Server) CheckDBConnection() bool{
     return false
 }
 
+type ExtentFreeList struct{
+    Num int
+    TotalSize int
+}
+
+type DataFileVersion struct{
+    Major int
+    Minor int
+}
+
+type DBStatus struct{
+    Db string
+    Collections int
+    Objects int
+    AvgObjectSize float32
+    DataSize int
+    NumExtents int
+    Indexes int
+    IndexesSize int
+    FileSize int
+    NSFileSize int
+    Ok int
+    DataFileVersion *DataFileVersion
+    ExtentFreeList *ExtentFreeList
+}
+
+func (s *Server) DBStatsScaled(scale int) *DBStatus{
+    if s.mclient != nil{
+        cmd := bson.M{"dbstats":1, "scale":scale}
+        res := new(DBStatus)
+        s.mclient.DB(s.cfg.Db.Name).Run(cmd, &res)
+        return res
+    }
+    return nil
+}
+
+func (s *Server) DBStats() *DBStatus{
+    return s.DBStatsScaled(1)
+}
+
+
 type Server struct {
     mclient *mgo.Session
     r *rest.Rest
