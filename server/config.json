@@ -2,7 +2,7 @@
     "db":{ 
         "name": "test",
         "connstr": "mongodb://localhost:27017",
-        "conntimeout": 1
+        "conntimeout": 10
     },
     "restPort": 90000,
     "logPath": "/tmp/log"

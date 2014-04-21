@@ -3,6 +3,7 @@ package server
 import (
     rest "github.com/googollee/go-rest"
     mgo "labix.org/v2/mgo"
+    bson "labix.org/v2/mgo/bson"
     "os"
     "encoding/json"
     "fmt"
@@ -22,6 +23,18 @@ func (s *Server) Run(){
     timeout := time.Duration(s.cfg.Db.ConnTimeout)*time.Second
     s.mclient, _ =  mgo.DialWithTimeout(s.cfg.Db.Connstr, timeout)
     //TODO add logger
+}
+
+//checks if the current Connection to the database is responding
+func (s *Server) CheckDBConnection() bool{
+    cmd := bson.M{"ping":1}
+    res := struct{Ok int}{}
+    if s.mclient != nil {
+        s.mclient.Run(cmd, &res)
+        fmt.Print(res)
+        return res.Ok == 1
+    }
+    return false
 }
 
 type Server struct {

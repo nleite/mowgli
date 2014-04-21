@@ -22,6 +22,9 @@ func hello(res http.ResponseWriter, req *http.Request) {
 func main(){
     fpath := "server/config.json"
     config := s.LoadConfig(fpath)
+    server := s.NewServer(&config)
+    server.Run()
+    fmt.Println(server.CheckDBConnection())
     fmt.Println(config)
     h := rest.New()
     h.Use(rest.NewLog(nil))
