@@ -25,6 +25,28 @@ func (s *Server) Run(){
     //TODO add logger
 }
 
+func (s *Server) DBServerStatus() *map[string]string{
+    cmd := bson.M{ "serverStatus": 1 }
+    res := make(map[string]string)
+    s.mclient.Run(cmd, &res)
+    return &res
+}
+
+func (s *Server) DBCollections(dbName string) []string{
+    //collect all namespaces which are not indexes "*.$*"
+    query := bson.M{ "name": bson.M{"$regex": `\.\$`}}
+    //from collection system.namespaces
+    colname := "system.namespaces"
+
+    var collections []string
+    iter := s.mclient.DB(dbName).C(colname).Find(query).Iter()
+    res := struct{Name string}{}
+    for iter.Next( &res ){
+        collections = append(collections, res.Name)
+    }
+    return collections
+}
+
 //checks if the current Connection to the database is responding
 func (s *Server) CheckDBConnection() bool{
     cmd := bson.M{"ping":1}
@@ -75,6 +97,12 @@ func (s *Server) DBStatsScaled(scale int) *DBStatus{
 
 func (s *Server) DBStats() *DBStatus{
     return s.DBStatsScaled(1)
+}
+
+
+//method to collect the database name on configuration
+func (s *Server) DBName() string{
+    return s.cfg.Db.Name
 }
 
 
