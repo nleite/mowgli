@@ -33,8 +33,8 @@ func (s *Server) DBServerStatus() *map[string]string{
 }
 
 func (s *Server) DBCollections(dbName string) []string{
-    //collect all namespaces which are not indexes "*.$*"
-    query := bson.M{ "name": bson.M{"$regex": `\.\$`}}
+    //collect all namespaces which are not indexes "*.$*" and system.*
+    query := bson.M{ "name": bson.M{ "$not": bson.RegEx{`\$|system`, ""}  }}
     //from collection system.namespaces
     colname := "system.namespaces"
 
