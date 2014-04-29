@@ -144,4 +144,24 @@ func TestRun(t *testing.T){
 
 }
 
+func TestCreateCollection(t *testing.T){
+    server := getServer()
+    dbname := "TestCreateCollection"
+    colname := "newCollection"
+    server.Run()
+
+    err := server.CreateCollection( dbname, colname)
+    if err != nil {
+        t.Error("Sad: returned error ", err.Error())
+    }
+
+    err = server.CreateCollection( dbname, colname)
+    //expect error since we are trying to create the collection twice
+    if err == nil{
+        t.Error( "Was expecting error!")
+    }
+    dropDatabase(dbname)
+
+}
+
 

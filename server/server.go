@@ -8,6 +8,7 @@ import (
     "encoding/json"
     "fmt"
     "time"
+    "errors"
     //log "timber"
 )
 
@@ -31,6 +32,23 @@ func (s *Server) DBServerStatus() *map[string]string{
     s.mclient.Run(cmd, &res)
     return &res
 }
+
+
+//Creates a new collection for a given database name. 
+//Returns error in case it's not possible to create the collection
+func (s *Server) CreateCollection(dbName string, colName string) error{
+    // { create: "ohyeah" }
+    cmd := bson.M{ "create": colName}
+    res := struct{ Ok int; Errmsg string}{}
+    s.mclient.DB(dbName).Run(cmd, &res)
+    if res.Ok == 1{
+        return nil
+    }
+
+    return errors.New( res.Errmsg )
+}
+
+
 
 func (s *Server) DBCollections(dbName string) []string{
     //collect all namespaces which are not indexes "*.$*" and system.*

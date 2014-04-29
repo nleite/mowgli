@@ -12,7 +12,19 @@ type MethodResult struct{
 }
 
 
-//Returns a JSON document with the list of collections
+//Post Collection 
+func (s *Server) PostCollections(w rest.ResponseWriter, r *rest.Request){
+    body := struct{Name string}{}
+    r.DecodeJsonPayload(&body)
+    err := s.CreateCollection(s.DBName(), body.Name)
+    if err == nil{
+        w.WriteHeader(200)
+    } else {
+        rest.Error(w, err.Error(), 400)
+    }
+}
+
+//Returns a JSON document with the list of the name of collections
 func (s *Server) GetCollections(w rest.ResponseWriter, r *rest.Request){
     listCollections := s.DBCollections(s.DBName())
     for i, col := range(listCollections){

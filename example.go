@@ -32,6 +32,7 @@ func main(){
 
     h.SetRoutes(&rest.Route{"GET", "/h", server.GetStats})
     h.SetRoutes(&rest.Route{"GET", "/h/collections", server.GetCollections})
+    h.SetRoutes(&rest.Route{"POST", "/h/collections", server.PostCollections})
 
     http.ListenAndServe(":9000", &h)
 }
